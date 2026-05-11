@@ -6,7 +6,11 @@ import {
   Layers, 
   Play, 
   ExternalLink, 
-  Zap
+  Zap,
+  Plus,
+  Trash2,
+  Copy,
+  Check
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -21,7 +25,7 @@ interface Project {
   tags: string[];
 }
 
-const STORAGE_KEY = 'portfolio_projects_local';
+const STORAGE_KEY = 'portfolio_projects_v1';
 
 const DEFAULT_PROJECTS: Project[] = [
   {
@@ -102,7 +106,17 @@ const SectionHeader = ({
   </div>
 );
 
-const ProjectCard = ({ project, onEdit }: { project: Project, onEdit?: () => void }) => {
+const ProjectCard = ({ 
+  project, 
+  isAdmin,
+  onEdit,
+  onDelete
+}: { 
+  project: Project, 
+  isAdmin: boolean,
+  onEdit: () => void,
+  onDelete: () => void
+}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -110,7 +124,7 @@ const ProjectCard = ({ project, onEdit }: { project: Project, onEdit?: () => voi
       <motion.div 
         layout
         onClick={() => {
-            if (onEdit) onEdit();
+            if (isAdmin) onEdit();
             else window.open(project.link, '_blank');
         }}
         className={`relative block glass rounded-2xl overflow-hidden cursor-pointer`}
@@ -135,14 +149,14 @@ const ProjectCard = ({ project, onEdit }: { project: Project, onEdit?: () => voi
                 className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]"
               >
                 <div className="w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-2xl">
-                  {onEdit ? <Layers className="w-6 h-6" /> : <Play className="w-6 h-6 fill-current ml-1" />}
+                  {isAdmin ? <Layers className="w-6 h-6" /> : <Play className="w-6 h-6 fill-current ml-1" />}
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
           <div className="absolute bottom-4 right-4 text-[10px] uppercase font-mono tracking-wider text-zinc-400 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            {onEdit ? 'Edit Details' : 'Watch Now'} <ExternalLink className="w-3 h-3" />
+            {isAdmin ? 'Edit Details' : 'Watch Now'} <ExternalLink className="w-3 h-3" />
           </div>
         </div>
 
@@ -164,6 +178,18 @@ const ProjectCard = ({ project, onEdit }: { project: Project, onEdit?: () => voi
           </p>
         </div>
       </motion.div>
+
+      {isAdmin && (
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+          className="absolute -top-3 -right-3 p-2 bg-rose-500 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-20"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      )}
     </div>
   );
 };
@@ -174,6 +200,7 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   // Load from Local Storage
   useEffect(() => {
@@ -199,6 +226,28 @@ export default function App() {
     saveToLocal(updatedProjects);
   };
 
+  const handleAdd = () => {
+    const newProject: Project = {
+      id: `new-${Date.now()}`,
+      title: 'New Video Project',
+      category: filter,
+      description: 'Project description here...',
+      thumbnail: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=800',
+      link: '#',
+      tags: ['New', 'Edit'],
+    };
+    const updated = [...projects, newProject];
+    saveToLocal(updated);
+    setEditingId(newProject.id);
+  };
+
+  const handleDelete = (id: string) => {
+    if (confirm('정말로 이 항목을 삭제하시겠습니까?')) {
+      const updated = projects.filter(p => p.id !== id);
+      saveToLocal(updated);
+    }
+  };
+
   const resetToDefaults = () => {
     if (confirm('정말로 모든 데이터를 기본 샘플 데이터로 초기화하시겠습니까?')) {
       saveToLocal(DEFAULT_PROJECTS);
@@ -207,7 +256,24 @@ export default function App() {
   };
 
   const toggleAdmin = () => {
-    setIsAdmin(!isAdmin);
+    if (!isAdmin) {
+      const pass = prompt('관리자 비밀번호를 입력하세요. (기본: admin123)');
+      if (pass === 'admin123') {
+        setIsAdmin(true);
+      } else if (pass !== null) {
+        alert('비밀번호가 틀렸습니다.');
+      }
+    } else {
+      setIsAdmin(false);
+    }
+  };
+
+  const copyToClipboard = () => {
+    const code = `const DEFAULT_PROJECTS: Project[] = ${JSON.stringify(projects, null, 2)};`;
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+    alert('프로젝트 데이터가 클립보드에 복사되었습니다. src/App.tsx의 DEFAULT_PROJECTS 상수에 붙여넣으세요.');
   };
 
   const categories = [
@@ -234,13 +300,35 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen Selection:bg-zinc-700">
+    <div className="min-h-screen selection:bg-zinc-700">
       {/* Admin Toggle */}
-      <div className="fixed bottom-8 right-8 z-50">
+      <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-4">
+        {isAdmin && (
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex flex-col gap-2"
+          >
+            <button 
+              onClick={handleAdd}
+              className="p-3 rounded-full bg-blue-500 text-white shadow-2xl hover:bg-blue-600 transition-all flex items-center gap-2 group"
+            >
+              <Plus className="w-6 h-6" />
+              <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all text-xs font-mono whitespace-nowrap">Add New Project</span>
+            </button>
+            <button 
+              onClick={copyToClipboard}
+              className="p-3 rounded-full bg-zinc-800 text-zinc-200 border border-white/10 shadow-2xl hover:bg-zinc-700 transition-all flex items-center gap-2 group"
+            >
+              {copied ? <Check className="w-6 h-6 text-green-500" /> : <Copy className="w-6 h-6" />}
+              <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all text-xs font-mono whitespace-nowrap">Copy Data for Code</span>
+            </button>
+          </motion.div>
+        )}
         <button 
           id="admin-toggle"
           onClick={toggleAdmin}
-          className={`p-3 rounded-full glass border shadow-2xl transition-all ${isAdmin ? 'bg-white text-black' : 'text-white hover:border-white/40'}`}
+          className={`p-3 rounded-full glass border shadow-2xl transition-all ${isAdmin ? 'bg-white text-black' : 'text-zinc-500 hover:text-white hover:border-white/40'}`}
         >
           <Layers className="w-6 h-6" />
         </button>
@@ -266,12 +354,22 @@ export default function App() {
               </div>
               <div className="space-y-6">
                 <div>
+                  <label className="block text-xs font-mono uppercase text-zinc-500 mb-2">Category</label>
+                  <select 
+                    value={editingProject.category}
+                    onChange={(e) => handleEdit(editingId, { category: e.target.value as any })}
+                    className="w-full bg-zinc-800/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white"
+                  >
+                    {categories.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                  </select>
+                </div>
+                <div>
                   <label className="block text-xs font-mono uppercase text-zinc-500 mb-2">Thumbnail URL</label>
                   <input 
                     type="text" 
                     value={editingProject.thumbnail}
                     onChange={(e) => handleEdit(editingId, { thumbnail: e.target.value })}
-                    className="w-full bg-zinc-800/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30"
+                    className="w-full bg-zinc-800/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white"
                   />
                 </div>
                 <div>
@@ -280,7 +378,7 @@ export default function App() {
                     type="text" 
                     value={editingProject.link}
                     onChange={(e) => handleEdit(editingId, { link: e.target.value })}
-                    className="w-full bg-zinc-800/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30"
+                    className="w-full bg-zinc-800/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white"
                   />
                 </div>
                 <div>
@@ -289,7 +387,7 @@ export default function App() {
                     type="text" 
                     value={editingProject.title}
                     onChange={(e) => handleEdit(editingId, { title: e.target.value })}
-                    className="w-full bg-zinc-800/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30"
+                    className="w-full bg-zinc-800/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white"
                   />
                 </div>
                 <div>
@@ -297,7 +395,7 @@ export default function App() {
                   <textarea 
                     value={editingProject.description}
                     onChange={(e) => handleEdit(editingId, { description: e.target.value })}
-                    className="w-full bg-zinc-800/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30 min-h-24"
+                    className="w-full bg-zinc-800/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/30 min-h-24 text-white"
                   />
                 </div>
                 <div className="flex gap-4 pt-4 border-t border-white/5">
@@ -305,7 +403,7 @@ export default function App() {
                     onClick={resetToDefaults}
                     className="w-full py-3 rounded-xl glass border border-amber-500/20 text-amber-500 text-xs font-mono uppercase tracking-widest hover:bg-amber-500/10 transition-colors"
                   >
-                    Reset to Default Samples
+                    Reset All to Samples
                   </button>
                 </div>
 
@@ -314,7 +412,7 @@ export default function App() {
                     onClick={() => setEditingId(null)}
                     className="flex-1 py-3 rounded-xl bg-white text-black font-medium hover:bg-zinc-200 transition-colors"
                   >
-                    Done
+                    Save & Close
                   </button>
                 </div>
               </div>
@@ -397,7 +495,9 @@ export default function App() {
                       <div key={project.id} className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1.5rem)] max-w-sm">
                         <ProjectCard 
                           project={project} 
-                          onEdit={isAdmin ? () => setEditingId(project.id) : undefined} 
+                          isAdmin={isAdmin}
+                          onEdit={() => setEditingId(project.id)} 
+                          onDelete={() => handleDelete(project.id)}
                         />
                       </div>
                     ))}
