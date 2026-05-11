@@ -28,7 +28,7 @@ interface Project {
   tags: string[];
 }
 
-const STORAGE_KEY = 'portfolio_projects_v1';
+const STORAGE_KEY = 'portfolio_projects_v3';
 
 const DEFAULT_PROJECTS: Project[] = [
   {
