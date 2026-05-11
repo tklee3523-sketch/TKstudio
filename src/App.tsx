@@ -12,7 +12,8 @@ import {
   Copy,
   Check,
   Youtube,
-  Instagram
+  Instagram,
+  User
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -20,7 +21,7 @@ import { useEffect, useState } from 'react';
 interface Project {
   id: string;
   title: string;
-  category: 'journalist' | 'creative' | 'motion';
+  category: 'journalist' | 'creative' | 'motion' | 'intro';
   description: string;
   thumbnail: string;
   link: string;
@@ -32,9 +33,9 @@ const STORAGE_KEY = 'portfolio_projects_v1';
 const DEFAULT_PROJECTS: Project[] = [
   {
     "id": "c1",
-    "title": "과연 얼마나 짤까?",
+    "title": "당시 트렌드를 반영한 숏폼 리뷰 영상",
     "category": "creative",
-    "description": "당시 트렌드를 반영한 숏폼 리뷰 영상",
+    "description": "",
     "thumbnail": "https://i.ytimg.com/vi/kWRQzlBL9tM/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLBbv1394AP2XB5MAxY0gXALgcNyZg&usqp=CCk",
     "tags": [
       "Vlog",
@@ -45,9 +46,9 @@ const DEFAULT_PROJECTS: Project[] = [
   },
   {
     "id": "c2",
-    "title": "[VLOG 발리 신혼여행] 아무것도 안하는 우붓살이",
+    "title": "여행 브이로그 롱폼영상",
     "category": "creative",
-    "description": "여행 브이로그 롱폼영상",
+    "description": "",
     "thumbnail": "https://i.ytimg.com/an_webp/Os6qqs57NlU/mqdefault_6s.webp?du=3000&sqp=CMzKhNAG&rs=AOn4CLCXZHg33LXbtffW3zTQ2rl_y7ZPFw",
     "tags": [
       "Review",
@@ -58,9 +59,9 @@ const DEFAULT_PROJECTS: Project[] = [
   },
   {
     "id": "p1",
-    "title": "청송군 2024 제1회 백자축제 2024 05 31",
+    "title": "협업없이 촬영/취재/편집",
     "category": "journalist",
-    "description": "협업없이 촬영/취재/편집",
+    "description": "",
     "thumbnail": "https://i.ytimg.com/vi/-7dyDPKh2pc/hqdefault.jpg?sqp=-oaymwEmCKgBEF5IWvKriqkDGQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAE=&rs=AOn4CLDBOYOual1PDP_hrXc6rbUGn9raMg",
     "tags": [
       "Field Sketch",
@@ -71,9 +72,9 @@ const DEFAULT_PROJECTS: Project[] = [
   },
   {
     "id": "m1",
-    "title": "모션그래픽 교육영상 포트폴리오",
+    "title": "현업으로 하고있는 교육영상 제작 포트폴리오",
     "category": "motion",
-    "description": "현업으로 하고있는 교육영상 제작 포트폴리오",
+    "description": "",
     "thumbnail": "https://i.ytimg.com/an_webp/VMWF5mPE1m4/mqdefault_6s.webp?du=3000&sqp=CMqdhNAG&rs=AOn4CLCqXsn6QmH-sg25jg_MxZD-bnQ97A",
     "tags": [
       "Motion Graphics",
@@ -84,9 +85,9 @@ const DEFAULT_PROJECTS: Project[] = [
   },
   {
     "id": "m2",
-    "title": "키네틱 타이포그래피 에스파(aespa) - drama",
+    "title": "타이포그래피 포트폴리오",
     "category": "motion",
-    "description": "타이포그래피 포트폴리오",
+    "description": "",
     "thumbnail": "https://i.ytimg.com/an_webp/Fh5Xly1seds/mqdefault_6s.webp?du=3000&sqp=CNGKhNAG&rs=AOn4CLDuJx16Rk-l0wJcUJC-YIrR21UeHA",
     "tags": [
       "2D Animation",
@@ -94,6 +95,15 @@ const DEFAULT_PROJECTS: Project[] = [
       "Visual Polish"
     ],
     "link": "https://youtu.be/Fh5Xly1seds?si=KbEwDOPD7RFlK_1Y"
+  },
+  {
+    "id": "intro-video",
+    "title": "셀프 면접영상",
+    "category": "intro",
+    "description": "",
+    "thumbnail": "https://i.ytimg.com/an_webp/FmOiPcSjzSU/mqdefault_6s.webp?du=3000&sqp=CMrJhNAG&rs=AOn4CLC0nbD7WXf5hO2JMsOPjtISiMWZdg",
+    "tags": ["Self-Introduction", "Showreel", "Greeting"],
+    "link": "https://youtu.be/FmOiPcSjzSU?si=rNjVNxKprPjUJO9x"
   }
 ];
 
@@ -208,7 +218,7 @@ const ProjectCard = ({
 };
 
 export default function App() {
-  const [filter, setFilter] = useState<Project['category']>('creative');
+  const [filter, setFilter] = useState<Project['category']>('intro');
   const [projects, setProjects] = useState<Project[]>(DEFAULT_PROJECTS);
   const [isAdmin, setIsAdmin] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -290,6 +300,7 @@ export default function App() {
   };
 
   const categories = [
+    { id: 'intro', label: 'Intro', icon: User },
     { id: 'creative', label: 'Creative & Lifestyle', icon: Heart },
     { id: 'journalist', label: 'Video Journalist', icon: Tv },
     { id: 'motion', label: 'Motion & 2D', icon: Zap },
@@ -459,8 +470,8 @@ export default function App() {
           </h1>
           
           <p className="text-lg md:text-xl text-zinc-400 max-w-3xl leading-relaxed mx-auto">
-            현장의 리얼리티를 담아내는 촬영 감각과 정보의 가독성을 높이는 2D 모션 그래픽을 결합하여, 
-            시청자의 몰입을 이끄는 완성도 높은 콘텐츠를 제작합니다.
+            실무로 다져진 2D 모션 그래픽 전문성을 바탕으로, 기획부터 촬영까지 유기적으로 연결하여 
+            기획 의도와 비주얼이 완벽하게 조화된 최적의 콘텐츠를 제안합니다.
           </p>
         </motion.div>
       </header>
@@ -497,15 +508,24 @@ export default function App() {
                     icon={cat.icon}
                     title={cat.label}
                     subtitle={
-                        cat.id === 'creative' ? '트렌디한 영상 문법과 시각적 완성도를 추구하는 개인 프로젝트.' :
-                        cat.id === 'journalist' ? '기업 행사 스케치, 관공서 취재 기록 등 사실에 기반한 실무 영상 제작.' :
-                        '복잡한 데이터를 설명하는 인포그래픽부터 브랜드 아이덴티티를 살리는 모션 로고까지.'
+                        cat.id === 'intro' ? '저의 이야기와 열정을 담은 자기소개 영상입니다.' :
+                        cat.id === 'creative' ? '트렌드를 반영하는 개인 프로젝트.' :
+                        cat.id === 'journalist' ? '3개월간 200여개의 현장영상 제작.' :
+                        '교육용 영상 제작으로 다져진 모션 그래픽까지.'
                     }
-                    colorClass={cat.id === 'creative' ? 'bg-rose-500' : cat.id === 'journalist' ? 'bg-blue-500' : 'bg-amber-500'}
+                    colorClass={
+                        cat.id === 'intro' ? 'bg-zinc-400' :
+                        cat.id === 'creative' ? 'bg-rose-500' : 
+                        cat.id === 'journalist' ? 'bg-blue-500' : 
+                        'bg-amber-500'
+                    }
                   />
                   <div className="flex flex-wrap justify-center gap-8">
                     {projects.filter(p => p.category === cat.id).map(project => (
-                      <div key={project.id} className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1.5rem)] max-w-sm">
+                      <div 
+                        key={project.id} 
+                        className={`w-full ${cat.id === 'intro' ? 'md:w-full lg:w-full max-w-4xl' : 'md:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1.5rem)] max-w-sm'}`}
+                      >
                         <ProjectCard 
                           project={project} 
                           isAdmin={isAdmin}
