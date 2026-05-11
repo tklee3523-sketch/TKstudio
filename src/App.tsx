@@ -29,59 +29,83 @@ const STORAGE_KEY = 'portfolio_projects_v1';
 
 const DEFAULT_PROJECTS: Project[] = [
   {
-    id: 'c1',
-    title: 'SEOUL NIGHT VLOG: Cinematic Walk',
-    category: 'creative',
-    description: '트렌디한 영상 문법을 적용한 개인 채널의 대표 콘텐츠.',
-    thumbnail: 'https://images.unsplash.com/photo-1540959733332-e94e1b3f1084?auto=format&fit=crop&q=80&w=800',
-    tags: ['Vlog', 'Color Grading', 'Rhythmic Edit'],
-    link: 'https://www.instagram.com/biggam_couple/reels/',
+    "id": "c1",
+    "title": "SEOUL NIGHT VLOG: Cinematic Walk",
+    "category": "creative",
+    "description": "트렌디한 영상 문법을 적용한 개인 채널의 대표 콘텐츠.",
+    "thumbnail": "https://i.ytimg.com/vi/kWRQzlBL9tM/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLBbv1394AP2XB5MAxY0gXALgcNyZg&usqp=CCk",
+    "tags": [
+      "Vlog",
+      "Color Grading",
+      "Rhythmic Edit"
+    ],
+    "link": "https://www.instagram.com/biggam_couple/reels/"
   },
   {
-    id: 'c2',
-    title: '대감부부: Daily Review Series',
-    category: 'creative',
-    description: '라이프스타일 브랜드와의 협업을 통한 감각적인 리뷰 콘텐츠.',
-    thumbnail: 'https://images.unsplash.com/photo-1516245834210-c4c142787335?auto=format&fit=crop&q=80&w=800',
-    tags: ['Review', 'Engagement', 'Brand Collaboration'],
-    link: 'https://www.youtube.com/@biggam_couple',
+    "id": "c2",
+    "title": "대감부부: Daily Review Series",
+    "category": "creative",
+    "description": "라이프스타일 브랜드와의 협업을 통한 감각적인 리뷰 콘텐츠.",
+    "thumbnail": "https://images.unsplash.com/photo-1516245834210-c4c142787335?auto=format&fit=crop&q=80&w=800",
+    "tags": [
+      "Review",
+      "Engagement",
+      "Brand Collaboration"
+    ],
+    "link": "https://www.youtube.com/@biggam_couple"
   },
   {
-    id: 'p1',
-    title: 'Global Tech Forum 2025: Corporate Recap',
-    category: 'journalist',
-    description: '기업의 비전과 기술력을 전달하는 공식 스케치 영상입니다.',
-    thumbnail: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800',
-    tags: ['Field Sketch', 'Interview', 'Corporate'],
-    link: 'https://www.youtube.com/playlist?list=PLzblbroPB2mAHkZIfTy3tnldp6U2LHedf',
+    "id": "p1",
+    "title": "Global Tech Forum 2025: Corporate Recap",
+    "category": "journalist",
+    "description": "기업의 비전과 기술력을 전달하는 공식 스케치 영상입니다.",
+    "thumbnail": "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800",
+    "tags": [
+      "Field Sketch",
+      "Interview",
+      "Corporate"
+    ],
+    "link": "https://www.youtube.com/playlist?list=PLzblbroPB2mAHkZIfTy3tnldp6U2LHedf"
   },
   {
-    id: 'p2',
-    title: '제주 자연 박물관 취재 기록',
-    category: 'journalist',
-    description: '관공서 매체를 위한 현장 취재 및 정보 전달 영상물.',
-    thumbnail: 'https://images.unsplash.com/photo-1596409058445-9856a93c72b1?auto=format&fit=crop&q=80&w=800',
-    tags: ['Journalism', 'Rapid Response', 'Planning'],
-    link: 'https://www.youtube.com/playlist?list=PLzblbroPB2mAHkZIfTy3tnldp6U2LHedf',
+    "id": "p2",
+    "title": "제주 자연 박물관 취재 기록",
+    "category": "journalist",
+    "description": "관공서 매체를 위한 현장 취재 및 정보 전달 영상물.",
+    "thumbnail": "https://images.unsplash.com/photo-1596409058445-9856a93c72b1?auto=format&fit=crop&q=80&w=800",
+    "tags": [
+      "Journalism",
+      "Rapid Response",
+      "Planning"
+    ],
+    "link": "https://www.youtube.com/playlist?list=PLzblbroPB2mAHkZIfTy3tnldp6U2LHedf"
   },
   {
-    id: 'm1',
-    title: 'Health Education: Infographic Series',
-    category: 'motion',
-    description: '교육적 목적을 시각적으로 해결하는 2D 모션 그래픽.',
-    thumbnail: 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800',
-    tags: ['Motion Graphics', 'Infographics', 'Post-Production'],
-    link: 'https://www.youtube.com/@peter_tk_lee/videos',
+    "id": "m1",
+    "title": "Health Education: Infographic Series",
+    "category": "motion",
+    "description": "교육적 목적을 시각적으로 해결하는 2D 모션 그래픽.",
+    "thumbnail": "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800",
+    "tags": [
+      "Motion Graphics",
+      "Infographics",
+      "Post-Production"
+    ],
+    "link": "https://www.youtube.com/@peter_tk_lee/videos"
   },
   {
-    id: 'm2',
-    title: 'Brand Identity Motion Logo',
-    category: 'motion',
-    description: '실사 영상의 퀄리티를 높이는 로고 애니메이션 및 타이틀 디자인.',
-    thumbnail: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=800',
-    tags: ['2D Animation', 'Design Detail', 'Visual Polish'],
-    link: 'https://www.youtube.com/@peter_tk_lee/videos',
-  },
+    "id": "m2",
+    "title": "Brand Identity Motion Logo",
+    "category": "motion",
+    "description": "실사 영상의 퀄리티를 높이는 로고 애니메이션 및 타이틀 디자인.",
+    "thumbnail": "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=800",
+    "tags": [
+      "2D Animation",
+      "Design Detail",
+      "Visual Polish"
+    ],
+    "link": "https://www.youtube.com/@peter_tk_lee/videos"
+  }
 ];
 
 const SectionHeader = ({ 
