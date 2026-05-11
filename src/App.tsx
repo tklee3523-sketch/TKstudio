@@ -11,7 +11,6 @@ import {
   Trash2,
   Copy,
   Check,
-  Youtube,
   Instagram,
   User
 } from 'lucide-react';
@@ -28,7 +27,7 @@ interface Project {
   tags: string[];
 }
 
-const STORAGE_KEY = 'portfolio_projects_v5';
+const STORAGE_KEY = 'portfolio_projects_v6';
 
 const DEFAULT_PROJECTS: Project[] = [
   {
@@ -56,15 +55,6 @@ const DEFAULT_PROJECTS: Project[] = [
     "description": "",
     "thumbnail": "https://i9.ytimg.com/vi/VMWF5mPE1m4/mqdefault.jpg?sqp=CKyxh9AG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGEEgXChlMA8=&rs=AOn4CLCqdRPr_hWLECNnnhoYvQyzfgW51w",
     "link": "https://youtu.be/VMWF5mPE1m4?si=iBzXfHuGUvR7Csq4",
-    "tags": []
-  },
-  {
-    "id": "m2",
-    "title": "타이포그래피 포트폴리오",
-    "category": "motion",
-    "description": "",
-    "thumbnail": "https://i9.ytimg.com/vi_webp/Fh5Xly1seds/mqdefault.webp?v=66f37969&sqp=CKyxh9AG&rs=AOn4CLC-zLtpLlTeLeZLJPtmHPhoQFAh1Q",
-    "link": "https://youtu.be/Fh5Xly1seds?si=KbEwDOPD7RFlK_1Y",
     "tags": []
   },
   {
@@ -431,7 +421,7 @@ export default function App() {
           <div className="flex items-center gap-4 mb-6">
             <Clapperboard className="w-5 h-5 text-zinc-500" />
             <span className="text-xs font-mono tracking-[0.3em] uppercase text-zinc-500">
-              Portfolio 2026 {isAdmin && '(ADMIN MODE ENABLED)'}
+              TK Studio {isAdmin && '(ADMIN MODE ENABLED)'}
             </span>
           </div>
           
@@ -516,14 +506,6 @@ export default function App() {
         <div className="container mx-auto px-6 flex flex-col items-center gap-8">
           <div className="flex items-center gap-8">
             <a 
-              href="https://www.youtube.com/@biggam_couple" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-zinc-500 hover:text-white transition-all transform hover:scale-110"
-            >
-              <Youtube className="w-10 h-10" />
-            </a>
-            <a 
               href="https://www.instagram.com/biggam_couple/" 
               target="_blank" 
               rel="noopener noreferrer"
@@ -534,12 +516,8 @@ export default function App() {
           </div>
 
           <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Clapperboard className="w-4 h-4 text-zinc-600" />
-              <span className="text-xs font-mono text-zinc-600 tracking-widest uppercase">Motion Frame</span>
-            </div>
             <p className="text-zinc-500 text-[10px] uppercase tracking-widest">
-              © 2026 Peter TK Lee. All rights reserved.
+              © 2026 TK Studio. All rights reserved.
             </p>
           </div>
         </div>
