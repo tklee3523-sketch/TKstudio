@@ -31,59 +31,70 @@ const STORAGE_KEY = 'portfolio_projects_v1';
 
 const DEFAULT_PROJECTS: Project[] = [
   {
-    id: 'c1',
-    title: 'SEOUL NIGHT VLOG: Cinematic Walk',
-    category: 'creative',
-    description: '트렌디한 영상 문법을 적용한 개인 채널의 대표 콘텐츠.',
-    thumbnail: 'https://images.unsplash.com/photo-1540959733332-e94e1b3f1084?auto=format&fit=crop&q=80&w=800',
-    tags: ['Vlog', 'Color Grading', 'Rhythmic Edit'],
-    link: 'https://www.instagram.com/biggam_couple/reels/',
+    "id": "c1",
+    "title": "과연 얼마나 짤까?",
+    "category": "creative",
+    "description": "당시 트렌드를 반영한 숏폼 리뷰 영상",
+    "thumbnail": "https://i.ytimg.com/vi/kWRQzlBL9tM/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLBbv1394AP2XB5MAxY0gXALgcNyZg&usqp=CCk",
+    "tags": [
+      "Vlog",
+      "Color Grading",
+      "Rhythmic Edit"
+    ],
+    "link": "https://www.instagram.com/reel/DAStm4DgFwa/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
   },
   {
-    id: 'c2',
-    title: '대감부부: Daily Review Series',
-    category: 'creative',
-    description: '라이프스타일 브랜드와의 협업을 통한 감각적인 리뷰 콘텐츠.',
-    thumbnail: 'https://images.unsplash.com/photo-1516245834210-c4c142787335?auto=format&fit=crop&q=80&w=800',
-    tags: ['Review', 'Engagement', 'Brand Collaboration'],
-    link: 'https://www.youtube.com/@biggam_couple',
+    "id": "c2",
+    "title": "[VLOG 발리 신혼여행] 아무것도 안하는 우붓살이",
+    "category": "creative",
+    "description": "여행 브이로그 롱폼영상",
+    "thumbnail": "https://i.ytimg.com/an_webp/Os6qqs57NlU/mqdefault_6s.webp?du=3000&sqp=CMzKhNAG&rs=AOn4CLCXZHg33LXbtffW3zTQ2rl_y7ZPFw",
+    "tags": [
+      "Review",
+      "Engagement",
+      "Brand Collaboration"
+    ],
+    "link": "https://youtu.be/Os6qqs57NlU?si=7-Uigkgp4QEfxLly"
   },
   {
-    id: 'p1',
-    title: 'Global Tech Forum 2025: Corporate Recap',
-    category: 'journalist',
-    description: '기업의 비전과 기술력을 전달하는 공식 스케치 영상입니다.',
-    thumbnail: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800',
-    tags: ['Field Sketch', 'Interview', 'Corporate'],
-    link: 'https://www.youtube.com/playlist?list=PLzblbroPB2mAHkZIfTy3tnldp6U2LHedf',
+    "id": "p1",
+    "title": "청송군 2024 제1회 백자축제 2024 05 31",
+    "category": "journalist",
+    "description": "협업없이 촬영/취재/편집",
+    "thumbnail": "https://i.ytimg.com/vi/-7dyDPKh2pc/hqdefault.jpg?sqp=-oaymwEmCKgBEF5IWvKriqkDGQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAE=&rs=AOn4CLDBOYOual1PDP_hrXc6rbUGn9raMg",
+    "tags": [
+      "Field Sketch",
+      "Interview",
+      "Corporate"
+    ],
+    "link": "https://youtu.be/-7dyDPKh2pc?si=CG9NqKPzkK6kTLoc"
   },
   {
-    id: 'p2',
-    title: '제주 자연 박물관 취재 기록',
-    category: 'journalist',
-    description: '관공서 매체를 위한 현장 취재 및 정보 전달 영상물.',
-    thumbnail: 'https://images.unsplash.com/photo-1596409058445-9856a93c72b1?auto=format&fit=crop&q=80&w=800',
-    tags: ['Journalism', 'Rapid Response', 'Planning'],
-    link: 'https://www.youtube.com/playlist?list=PLzblbroPB2mAHkZIfTy3tnldp6U2LHedf',
+    "id": "m1",
+    "title": "모션그래픽 교육영상 포트폴리오",
+    "category": "motion",
+    "description": "현업으로 하고있는 교육영상 제작 포트폴리오",
+    "thumbnail": "https://i.ytimg.com/an_webp/VMWF5mPE1m4/mqdefault_6s.webp?du=3000&sqp=CMqdhNAG&rs=AOn4CLCqXsn6QmH-sg25jg_MxZD-bnQ97A",
+    "tags": [
+      "Motion Graphics",
+      "Infographics",
+      "Post-Production"
+    ],
+    "link": "https://youtu.be/VMWF5mPE1m4?si=iBzXfHuGUvR7Csq4"
   },
   {
-    id: 'm1',
-    title: 'Health Education: Infographic Series',
-    category: 'motion',
-    description: '교육적 목적을 시각적으로 해결하는 2D 모션 그래픽.',
-    thumbnail: 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800',
-    tags: ['Motion Graphics', 'Infographics', 'Post-Production'],
-    link: 'https://www.youtube.com/@peter_tk_lee/videos',
-  },
-  {
-    id: 'm2',
-    title: 'Brand Identity Motion Logo',
-    category: 'motion',
-    description: '실사 영상의 퀄리티를 높이는 로고 애니메이션 및 타이틀 디자인.',
-    thumbnail: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=800',
-    tags: ['2D Animation', 'Design Detail', 'Visual Polish'],
-    link: 'https://www.youtube.com/@peter_tk_lee/videos',
-  },
+    "id": "m2",
+    "title": "키네틱 타이포그래피 에스파(aespa) - drama",
+    "category": "motion",
+    "description": "타이포그래피 포트폴리오",
+    "thumbnail": "https://i.ytimg.com/an_webp/Fh5Xly1seds/mqdefault_6s.webp?du=3000&sqp=CNGKhNAG&rs=AOn4CLDuJx16Rk-l0wJcUJC-YIrR21UeHA",
+    "tags": [
+      "2D Animation",
+      "Design Detail",
+      "Visual Polish"
+    ],
+    "link": "https://youtu.be/Fh5Xly1seds?si=KbEwDOPD7RFlK_1Y"
+  }
 ];
 
 const SectionHeader = ({ 
