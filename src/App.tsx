@@ -27,7 +27,27 @@ interface Project {
   tags: string[];
 }
 
-const STORAGE_KEY = 'portfolio_projects_v6';
+const STORAGE_KEY = 'portfolio_projects_v7';
+
+const getYouTubeId = (url: string) => {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+};
+
+const getThumbnailUrl = (project: Project) => {
+  // If thumbnail is already a specific custom image (not youtube generated), use it
+  if (project.thumbnail && !project.thumbnail.includes('ytimg.com') && !project.thumbnail.includes('googleusercontent.com')) {
+    return project.thumbnail;
+  }
+  
+  const videoId = getYouTubeId(project.link);
+  if (videoId) {
+    // Official YouTube thumbnail URLs are more stable
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
+  return project.thumbnail;
+};
 
 const DEFAULT_PROJECTS: Project[] = [
   {
@@ -35,7 +55,7 @@ const DEFAULT_PROJECTS: Project[] = [
     "title": "당시 트렌드를 반영한 숏폼 리뷰 영상",
     "category": "creative",
     "description": "",
-    "thumbnail": "https://i.ytimg.com/vi/kWRQzlBL9tM/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLBbv1394AP2XB5MAxY0gXALgcNyZg&usqp=CCk",
+    "thumbnail": "https://img.youtube.com/vi/kWRQzlBL9tM/hqdefault.jpg",
     "link": "https://www.instagram.com/reel/DAStm4DgFwa/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
     "tags": []
   },
@@ -44,7 +64,7 @@ const DEFAULT_PROJECTS: Project[] = [
     "title": "협업없이 촬영/취재/편집",
     "category": "journalist",
     "description": "",
-    "thumbnail": "https://i.ytimg.com/vi/-7dyDPKh2pc/hqdefault.jpg?sqp=-oaymwEmCKgBEF5IWvKriqkDGQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAE=&rs=AOn4CLDBOYOual1PDP_hrXc6rbUGn9raMg",
+    "thumbnail": "https://img.youtube.com/vi/-7dyDPKh2pc/hqdefault.jpg",
     "link": "https://youtu.be/-7dyDPKh2pc?si=CG9NqKPzkK6kTLoc",
     "tags": []
   },
@@ -53,7 +73,7 @@ const DEFAULT_PROJECTS: Project[] = [
     "title": "현업으로 하고있는 교육영상 제작 포트폴리오",
     "category": "motion",
     "description": "",
-    "thumbnail": "https://i9.ytimg.com/vi/VMWF5mPE1m4/mqdefault.jpg?sqp=CKyxh9AG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGEEgXChlMA8=&rs=AOn4CLCqdRPr_hWLECNnnhoYvQyzfgW51w",
+    "thumbnail": "https://img.youtube.com/vi/VMWF5mPE1m4/hqdefault.jpg",
     "link": "https://youtu.be/VMWF5mPE1m4?si=iBzXfHuGUvR7Csq4",
     "tags": []
   },
@@ -62,7 +82,7 @@ const DEFAULT_PROJECTS: Project[] = [
     "title": "셀프 면접영상",
     "category": "intro",
     "description": "",
-    "thumbnail": "https://i9.ytimg.com/vi/FmOiPcSjzSU/mqdefault.jpg?v=66d41f7a&sqp=CICvh9AG&rs=AOn4CLCvom4hXqw_b1VyO8ho6TC8isD6sw",
+    "thumbnail": "https://img.youtube.com/vi/FmOiPcSjzSU/hqdefault.jpg",
     "link": "https://youtu.be/FmOiPcSjzSU?si=rNjVNxKprPjUJO9x",
     "tags": []
   }
@@ -115,12 +135,17 @@ const ProjectCard = ({
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
       >
-        <div className="aspect-video relative overflow-hidden">
+        <div className="aspect-video relative overflow-hidden bg-zinc-900">
           <img 
-            src={project.thumbnail} 
+            src={getThumbnailUrl(project)} 
             alt={project.title}
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              // Fallback to a placeholder if the image fails to load
+              target.src = 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&q=80&w=800';
+            }}
           />
           <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent opacity-60" />
           
@@ -185,6 +210,8 @@ export default function App() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   // Load from Local Storage
   useEffect(() => {
@@ -199,6 +226,27 @@ export default function App() {
     }
     setIsLoading(false);
   }, []);
+
+  // Scroll Visibility Logic
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Show if scrolling up or at the top
+      if (currentScrollY < lastScrollY || currentScrollY < 10) {
+        setIsVisible(true);
+      } 
+      // Hide if scrolling down and passed header
+      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const saveToLocal = (newProjects: Project[]) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newProjects));
@@ -438,19 +486,22 @@ export default function App() {
       </header>
 
       <main className="container mx-auto px-6 pb-32">
-        <div className="flex flex-wrap items-center gap-4 mb-24 sticky top-8 z-40 p-2 glass rounded-full w-fit mx-auto">
+        <div className={`grid grid-cols-2 md:flex items-center gap-2 mb-24 sticky top-8 z-40 p-2 glass rounded-2xl md:rounded-full w-full md:w-fit mx-auto transition-all duration-300 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-20 opacity-0 pointer-events-none'}`}>
           {categories.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setFilter(cat.id as any)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-medium transition-all ${
+              onClick={() => {
+                setFilter(cat.id as any);
+                // On mobile, scroll slightly to show state change if needed
+              }}
+              className={`flex items-center justify-center md:justify-start gap-2 px-4 md:px-5 py-3 md:py-2.5 rounded-xl md:rounded-full text-[11px] md:text-xs font-medium transition-all ${
                 filter === cat.id 
-                  ? 'bg-zinc-100 text-black shadow-lg scale-105' 
+                  ? 'bg-zinc-100 text-black shadow-lg md:scale-105' 
                   : 'text-zinc-400 hover:text-zinc-100'
               }`}
             >
-              <cat.icon className="w-3.5 h-3.5" />
-              {cat.label}
+              <cat.icon className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">{cat.label}</span>
             </button>
           ))}
         </div>
