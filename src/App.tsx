@@ -28,7 +28,7 @@ interface Project {
   tags: string[];
 }
 
-const STORAGE_KEY = 'portfolio_projects_v3';
+const STORAGE_KEY = 'portfolio_projects_v5';
 
 const DEFAULT_PROJECTS: Project[] = [
   {
@@ -37,25 +37,8 @@ const DEFAULT_PROJECTS: Project[] = [
     "category": "creative",
     "description": "",
     "thumbnail": "https://i.ytimg.com/vi/kWRQzlBL9tM/oardefault.jpg?sqp=-oaymwEoCJUDENAFSFqQAgHyq4qpAxcIARUAAIhC2AEB4gEKCBgQAhgGOAFAAQ==&rs=AOn4CLBbv1394AP2XB5MAxY0gXALgcNyZg&usqp=CCk",
-    "tags": [
-      "Vlog",
-      "Color Grading",
-      "Rhythmic Edit"
-    ],
-    "link": "https://www.instagram.com/reel/DAStm4DgFwa/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
-  },
-  {
-    "id": "c2",
-    "title": "여행 브이로그 롱폼영상",
-    "category": "creative",
-    "description": "",
-    "thumbnail": "https://i.ytimg.com/an_webp/Os6qqs57NlU/mqdefault_6s.webp?du=3000&sqp=CMzKhNAG&rs=AOn4CLCXZHg33LXbtffW3zTQ2rl_y7ZPFw",
-    "tags": [
-      "Review",
-      "Engagement",
-      "Brand Collaboration"
-    ],
-    "link": "https://youtu.be/Os6qqs57NlU?si=7-Uigkgp4QEfxLly"
+    "link": "https://www.instagram.com/reel/DAStm4DgFwa/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+    "tags": []
   },
   {
     "id": "p1",
@@ -63,47 +46,35 @@ const DEFAULT_PROJECTS: Project[] = [
     "category": "journalist",
     "description": "",
     "thumbnail": "https://i.ytimg.com/vi/-7dyDPKh2pc/hqdefault.jpg?sqp=-oaymwEmCKgBEF5IWvKriqkDGQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAE=&rs=AOn4CLDBOYOual1PDP_hrXc6rbUGn9raMg",
-    "tags": [
-      "Field Sketch",
-      "Interview",
-      "Corporate"
-    ],
-    "link": "https://youtu.be/-7dyDPKh2pc?si=CG9NqKPzkK6kTLoc"
+    "link": "https://youtu.be/-7dyDPKh2pc?si=CG9NqKPzkK6kTLoc",
+    "tags": []
   },
   {
     "id": "m1",
     "title": "현업으로 하고있는 교육영상 제작 포트폴리오",
     "category": "motion",
     "description": "",
-    "thumbnail": "https://i.ytimg.com/an_webp/VMWF5mPE1m4/mqdefault_6s.webp?du=3000&sqp=CMqdhNAG&rs=AOn4CLCqXsn6QmH-sg25jg_MxZD-bnQ97A",
-    "tags": [
-      "Motion Graphics",
-      "Infographics",
-      "Post-Production"
-    ],
-    "link": "https://youtu.be/VMWF5mPE1m4?si=iBzXfHuGUvR7Csq4"
+    "thumbnail": "https://i9.ytimg.com/vi/VMWF5mPE1m4/mqdefault.jpg?sqp=CKyxh9AG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGEEgXChlMA8=&rs=AOn4CLCqdRPr_hWLECNnnhoYvQyzfgW51w",
+    "link": "https://youtu.be/VMWF5mPE1m4?si=iBzXfHuGUvR7Csq4",
+    "tags": []
   },
   {
     "id": "m2",
     "title": "타이포그래피 포트폴리오",
     "category": "motion",
     "description": "",
-    "thumbnail": "https://i.ytimg.com/an_webp/Fh5Xly1seds/mqdefault_6s.webp?du=3000&sqp=CNGKhNAG&rs=AOn4CLDuJx16Rk-l0wJcUJC-YIrR21UeHA",
-    "tags": [
-      "2D Animation",
-      "Design Detail",
-      "Visual Polish"
-    ],
-    "link": "https://youtu.be/Fh5Xly1seds?si=KbEwDOPD7RFlK_1Y"
+    "thumbnail": "https://i9.ytimg.com/vi_webp/Fh5Xly1seds/mqdefault.webp?v=66f37969&sqp=CKyxh9AG&rs=AOn4CLC-zLtpLlTeLeZLJPtmHPhoQFAh1Q",
+    "link": "https://youtu.be/Fh5Xly1seds?si=KbEwDOPD7RFlK_1Y",
+    "tags": []
   },
   {
     "id": "intro-video",
     "title": "셀프 면접영상",
     "category": "intro",
     "description": "",
-    "thumbnail": "https://i.ytimg.com/an_webp/FmOiPcSjzSU/mqdefault_6s.webp?du=3000&sqp=CMrJhNAG&rs=AOn4CLC0nbD7WXf5hO2JMsOPjtISiMWZdg",
-    "tags": ["Self-Introduction", "Showreel", "Greeting"],
-    "link": "https://youtu.be/FmOiPcSjzSU?si=rNjVNxKprPjUJO9x"
+    "thumbnail": "https://i9.ytimg.com/vi/FmOiPcSjzSU/mqdefault.jpg?v=66d41f7a&sqp=CICvh9AG&rs=AOn4CLCvom4hXqw_b1VyO8ho6TC8isD6sw",
+    "link": "https://youtu.be/FmOiPcSjzSU?si=rNjVNxKprPjUJO9x",
+    "tags": []
   }
 ];
 
@@ -185,7 +156,7 @@ const ProjectCard = ({
 
         <div className="p-6 text-center">
           <div className="flex flex-wrap justify-center gap-2 mb-4">
-            {project.tags.map(tag => (
+            {project.tags?.map(tag => tag && (
               <span key={tag} className="text-[10px] font-mono font-medium uppercase tracking-wider px-2 py-0.5 rounded-sm bg-zinc-800 text-zinc-400">
                 {tag}
               </span>
@@ -470,8 +441,8 @@ export default function App() {
           </h1>
           
           <p className="text-lg md:text-xl text-zinc-400 max-w-3xl leading-relaxed mx-auto">
-            실무로 다져진 2D 모션 그래픽 전문성을 바탕으로, 기획부터 촬영까지 유기적으로 연결하여 
-            기획 의도와 비주얼이 완벽하게 조화된 최적의 콘텐츠를 제안합니다.
+            기획은 모든 것의 시작이라 생각합니다. <br />
+            기획력을 바탕으로 대중에게 다가갈 수 있는 영상을 만듭니다.
           </p>
         </motion.div>
       </header>
