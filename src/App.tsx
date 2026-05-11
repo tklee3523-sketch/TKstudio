@@ -92,6 +92,9 @@ interface Project {
   tags: string[];
 }
 
+const STORAGE_KEY = 'portfolio_projects_local';
+const IS_FIREBASE_CONFIGURED = firebaseConfig.projectId && !firebaseConfig.projectId.includes('remixed-');
+
 const DEFAULT_PROJECTS: Project[] = [
   // Creative & Lifestyle (대감부부)
   {
@@ -257,8 +260,26 @@ export default function App() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
 
+  // Local Storage Helpers
+  const saveToLocal = (newProjects: Project[]) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newProjects));
+    setProjects(newProjects);
+  };
+
   // Test Connection
-    useEffect(() => {
+  useEffect(() => {
+    if (!IS_FIREBASE_CONFIGURED) {
+      console.log('Firebase not configured. Using local mode.');
+      const local = localStorage.getItem(STORAGE_KEY);
+      if (local) {
+        setProjects(JSON.parse(local));
+      } else {
+        setProjects(DEFAULT_PROJECTS);
+      }
+      setIsLoading(false);
+      return;
+    }
+
     const configInfo = `Project: ${firebaseConfig.projectId}, DB: ${firebaseConfig.firestoreDatabaseId || '(default)'}`;
     console.log('Firebase Runtime Info:', configInfo);
     
@@ -282,6 +303,8 @@ export default function App() {
 
   // Sync Projects from Firestore
   useEffect(() => {
+    if (!IS_FIREBASE_CONFIGURED) return;
+
     console.log('Starting Projects Snapshot Listener...');
     const q = query(collection(db, 'projects'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -309,6 +332,8 @@ export default function App() {
 
   // Auth State & Real-time Admin Check
   useEffect(() => {
+    if (!IS_FIREBASE_CONFIGURED) return;
+
     let unsubscribeAdmin: (() => void) | null = null;
 
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
@@ -373,17 +398,29 @@ export default function App() {
   }, [authError]);
 
   const handleEdit = async (id: string, updates: Partial<Project>) => {
-    if (!isAdmin) return;
-    try {
-      await updateDoc(doc(db, 'projects', id), updates as any);
-    } catch (error) {
-      handleFirestoreError(error, OperationType.UPDATE, `projects/${id}`);
+    const updatedProjects = projects.map(p => p.id === id ? { ...p, ...updates } : p);
+    
+    if (IS_FIREBASE_CONFIGURED) {
+      try {
+        await updateDoc(doc(db, 'projects', id), updates as any);
+      } catch (error) {
+        handleFirestoreError(error, OperationType.UPDATE, `projects/${id}`);
+      }
+    } else {
+      saveToLocal(updatedProjects);
     }
   };
 
   const manualSync = async () => {
     if (!isAdmin) return;
-    if (confirm('현재 작업 중인 샘플 데이터를 서버에 영구적으로 저장하시겠습니까?')) {
+    
+    if (!IS_FIREBASE_CONFIGURED) {
+      alert('Firebase가 설정되어 있지 않아 로컬 브라우저에만 저장됩니다.');
+      saveToLocal(projects);
+      return;
+    }
+
+    if (confirm('현재 작업 중인 데이터를 서버에 영구적으로 저장하시겠습니까?')) {
       try {
         for (const p of projects) {
           await setDoc(doc(db, 'projects', p.id), p);
@@ -398,13 +435,18 @@ export default function App() {
   const resetToDefaults = async () => {
     if (!isAdmin) return;
     if (confirm('정말로 모든 데이터를 기본 샘플 데이터로 초기화하시겠습니까?')) {
-      try {
-        for (const p of DEFAULT_PROJECTS) {
-          await setDoc(doc(db, 'projects', p.id), p);
+      if (IS_FIREBASE_CONFIGURED) {
+        try {
+          for (const p of DEFAULT_PROJECTS) {
+            await setDoc(doc(db, 'projects', p.id), p);
+          }
+          alert('서버 데이터가 초기화되었습니다.');
+        } catch (error) {
+          handleFirestoreError(error, OperationType.WRITE, 'projects');
         }
-        alert('초기화되었습니다.');
-      } catch (error) {
-        handleFirestoreError(error, OperationType.WRITE, 'projects');
+      } else {
+        saveToLocal(DEFAULT_PROJECTS);
+        alert('로컬 데이터가 초기화되었습니다.');
       }
     }
   };
@@ -433,6 +475,13 @@ export default function App() {
   const logout = () => signOut(auth);
 
   const toggleAdmin = () => {
+    if (!IS_FIREBASE_CONFIGURED) {
+      // Allow bypass if Firebase is not setup
+      setIsAdmin(!isAdmin);
+      console.log('Local Admin Mode:', !isAdmin);
+      return;
+    }
+
     if (!user) {
       console.log('Login required for admin check');
       login();
