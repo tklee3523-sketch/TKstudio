@@ -11,8 +11,7 @@ import {
   Trash2,
   Copy,
   Check,
-  Instagram,
-  User
+  Instagram
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -20,14 +19,14 @@ import { useEffect, useState } from 'react';
 interface Project {
   id: string;
   title: string;
-  category: 'journalist' | 'creative' | 'motion' | 'intro';
+  category: 'journalist' | 'creative' | 'motion';
   description: string;
   thumbnail: string;
   link: string;
   tags: string[];
 }
 
-const STORAGE_KEY = 'portfolio_projects_v7';
+const STORAGE_KEY = 'portfolio_projects_v8';
 
 const getYouTubeId = (url: string) => {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -75,15 +74,6 @@ const DEFAULT_PROJECTS: Project[] = [
     "description": "",
     "thumbnail": "https://img.youtube.com/vi/VMWF5mPE1m4/hqdefault.jpg",
     "link": "https://youtu.be/VMWF5mPE1m4?si=iBzXfHuGUvR7Csq4",
-    "tags": []
-  },
-  {
-    "id": "intro-video",
-    "title": "셀프 면접영상",
-    "category": "intro",
-    "description": "",
-    "thumbnail": "https://img.youtube.com/vi/FmOiPcSjzSU/hqdefault.jpg",
-    "link": "https://youtu.be/FmOiPcSjzSU?si=rNjVNxKprPjUJO9x",
     "tags": []
   }
 ];
@@ -204,7 +194,7 @@ const ProjectCard = ({
 };
 
 export default function App() {
-  const [filter, setFilter] = useState<Project['category']>('intro');
+  const [filter, setFilter] = useState<Project['category']>('creative');
   const [projects, setProjects] = useState<Project[]>(DEFAULT_PROJECTS);
   const [isAdmin, setIsAdmin] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -309,8 +299,7 @@ export default function App() {
   };
 
   const categories = [
-    { id: 'intro', label: 'Intro', icon: User },
-    { id: 'creative', label: 'Creative & Lifestyle', icon: Heart },
+    { id: 'creative', label: 'Creative', icon: Heart },
     { id: 'journalist', label: 'Video Journalist', icon: Tv },
     { id: 'motion', label: 'Motion & 2D', icon: Zap },
   ];
@@ -486,15 +475,14 @@ export default function App() {
       </header>
 
       <main className="container mx-auto px-6 pb-32">
-        <div className={`grid grid-cols-2 md:flex items-center gap-2 mb-24 sticky top-8 z-40 p-2 glass rounded-2xl md:rounded-full w-full md:w-fit mx-auto transition-all duration-300 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-20 opacity-0 pointer-events-none'}`}>
+        <div className={`grid grid-cols-3 md:flex items-center justify-center gap-1.5 md:gap-2 mb-24 sticky top-8 z-40 p-2 glass rounded-2xl md:rounded-full w-full max-w-md md:max-w-none md:w-fit mx-auto transition-all duration-300 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-20 opacity-0 pointer-events-none'}`}>
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => {
                 setFilter(cat.id as any);
-                // On mobile, scroll slightly to show state change if needed
               }}
-              className={`flex items-center justify-center md:justify-start gap-2 px-4 md:px-5 py-3 md:py-2.5 rounded-xl md:rounded-full text-[11px] md:text-xs font-medium transition-all ${
+              className={`flex items-center justify-center md:justify-start gap-1.5 sm:gap-2 px-2.5 sm:px-4 md:px-5 py-3 md:py-2.5 rounded-xl md:rounded-full text-[11px] md:text-xs font-medium transition-all ${
                 filter === cat.id 
                   ? 'bg-zinc-100 text-black shadow-lg md:scale-105' 
                   : 'text-zinc-400 hover:text-zinc-100'
@@ -520,13 +508,11 @@ export default function App() {
                     icon={cat.icon}
                     title={cat.label}
                     subtitle={
-                        cat.id === 'intro' ? '저의 이야기와 열정을 담은 자기소개 영상입니다.' :
                         cat.id === 'creative' ? '트렌드를 반영하는 개인 프로젝트.' :
                         cat.id === 'journalist' ? '3개월간 200여개의 현장영상 제작.' :
                         '교육용 영상 제작으로 다져진 모션 그래픽까지.'
                     }
                     colorClass={
-                        cat.id === 'intro' ? 'bg-zinc-400' :
                         cat.id === 'creative' ? 'bg-rose-500' : 
                         cat.id === 'journalist' ? 'bg-blue-500' : 
                         'bg-amber-500'
@@ -536,7 +522,7 @@ export default function App() {
                     {projects.filter(p => p.category === cat.id).map(project => (
                       <div 
                         key={project.id} 
-                        className={`w-full ${cat.id === 'intro' ? 'md:w-full lg:w-full max-w-4xl' : 'md:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1.5rem)] max-w-sm'}`}
+                        className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1.5rem)] max-w-sm"
                       >
                         <ProjectCard 
                           project={project} 
